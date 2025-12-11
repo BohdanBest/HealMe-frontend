@@ -1,0 +1,188 @@
+@import '@/app/styles/variables';
+
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #fff; // Чистий білий фон
+}
+
+.dashboard-content {
+  flex: 1;
+  margin-left: 280px;
+  padding: 2rem 4rem; // Широкі відступи
+  
+  &.loading { 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    color: #666;
+  }
+
+  @media (max-width: 768px) { 
+    margin-left: 0; 
+    padding: 1.5rem; 
+  }
+}
+
+// Header
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 1rem;
+
+  .page-main-title {
+    font-family: $font-family-serif;
+    color: $primary-color;
+    font-size: 2.5rem;
+    font-weight: 500;
+    margin: 0;
+  }
+}
+
+// Container
+.dashboard-container {
+  display: flex;
+  justify-content: center;
+}
+
+// Card
+.dashboard-card {
+  width: 100%;
+  max-width: 1200px;
+
+  &.single-card {
+    background: transparent;
+    box-shadow: none;
+    border: none;
+    padding: 0;
+  }
+}
+
+// Form Sections
+.form-group-section {
+  margin-bottom: 3rem; // Більший відступ між секціями
+  
+  .section-header {
+    margin-bottom: 1.5rem;
+    
+    .section-label {
+      font-size: 1.2rem;
+      color: #333;
+      margin-bottom: 0.2rem;
+      font-weight: 600;
+      font-family: $font-family-serif;
+    }
+  }
+}
+
+// Form Elements
+.dashboard-form {
+  display: flex;
+  flex-direction: column;
+  
+  .form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+
+    @media (max-width: 600px) { grid-template-columns: 1fr; }
+  }
+
+  // Враховуємо стилі для інпутів
+  .ui-input-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    &__label {
+      font-size: 0.9rem;
+      color: #4b5563;
+      font-weight: 500;
+    }
+  }
+
+  .ui-input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.2s;
+    background-color: #fff;
+    
+    &:focus { 
+      border-color: $primary-color; 
+      outline: none; 
+      box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+    }
+    
+    &.read-only {
+      background-color: #f9fafb;
+      color: #6b7280;
+      cursor: not-allowed;
+      border-color: #e5e7eb;
+    }
+  }
+
+  // Стилізація select (якщо Input компонент не підтримує select нативно)
+  .select-input {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1em;
+    cursor: pointer;
+  }
+
+  .field-note {
+    font-size: 0.8rem;
+    color: #9ca3af;
+    margin-top: 0.2rem;
+    font-style: italic;
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: flex-start;
+    padding-top: 2rem;
+    border-top: 1px solid #eee;
+    
+    .save-btn {
+      padding: 1rem 3rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+  }
+}
+
+// Alerts
+.alert {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  
+  &.success { 
+    background: #f0fdf4; 
+    color: #166534; 
+    border: 1px solid #bbf7d0; 
+  }
+  
+  &.error { 
+    background: #fef2f2; 
+    color: #991b1b; 
+    border: 1px solid #fecaca; 
+  }
+}

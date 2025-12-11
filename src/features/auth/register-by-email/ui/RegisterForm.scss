@@ -1,0 +1,161 @@
+@import '@/app/styles/variables';
+
+.register-page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #fff;
+  width: 100%;
+}
+
+.register-form {
+  max-width: 500px; // Трохи ширше, бо у нас два поля в рядку
+  width: 100%;
+  padding: 0 1.5rem;
+  margin-top: 3rem;
+  padding-bottom: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__title {
+    font-family: $font-family-serif;
+    color: $primary-color;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    font-weight: 500;
+  }
+
+  &__error-global {
+    width: 100%;
+    background-color: #fef2f2;
+    color: $error-color;
+    padding: 0.75rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  &__fields {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  // Рядок для імені та прізвища
+  &__row {
+    width: 100%;
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+
+    > * {
+      flex: 1; // Розтягнути на рівну ширину
+    }
+    
+    // Якщо це мобільний - в колонку
+    @media (max-width: 480px) {
+      flex-direction: column;
+      gap: 1.25rem;
+      margin-bottom: 0;
+    }
+  }
+
+  // Стилізація селекту під інпут
+  &__select {
+    width: 100%;
+    background-color: #fff;
+    cursor: pointer;
+    appearance: none; 
+    border: 1px solid #aaa; // Додав бордер, бо він був у попередніх версіях, але тут ти не вказав явно
+    border-radius: $border-radius-lg; // І радіус
+    padding: 0.8rem 1rem; // І паддінг
+    font-size: 1rem;
+    
+    // SVG стрілочка
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1em;
+
+    &:focus {
+      border-color: $primary-color;
+      box-shadow: 0 0 0 1px $primary-color;
+      outline: none;
+    }
+  }
+
+  // Override для Input компонента (спільні стилі з логіном)
+  .ui-input-wrapper {
+    margin-bottom: 0;
+    &__label {
+      color: $text-secondary;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  .ui-input {
+    border-radius: $border-radius-lg;
+    border: 1px solid #aaa;
+    padding: 0.8rem 1rem;
+
+    &:focus {
+      border-color: $primary-color;
+      box-shadow: 0 0 0 1px $primary-color;
+    }
+  }
+
+  &__checkbox {
+    margin-top: 0.5rem;
+    label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      color: $text-secondary;
+      font-size: 0.9rem;
+    }
+
+    input[type="checkbox"] {
+      width: 1.2rem;
+      height: 1.2rem;
+      accent-color: $primary-color; // Зелений чекбокс
+    }
+  }
+
+  &__actions {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+
+  &__submit-btn {
+    width: 200px;
+    background-color: $primary-color;
+    border-radius: $border-radius-lg;
+    padding: 0.8rem;
+    font-size: 1.1rem;
+    font-family: $font-family-serif;
+    
+    &:hover {
+      background-color: $primary-hover;
+    }
+  }
+
+  &__login-link {
+    color: $primary-color; // Зелений лінк як на макеті "Sign In"
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 1rem;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

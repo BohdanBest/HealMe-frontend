@@ -1,0 +1,154 @@
+@import '@/app/styles/variables';
+
+// Контейнер на всю сторінку, щоб центрувати контент
+.login-page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #fff;
+  width: 100%;
+}
+
+.login-header {
+  width: 100%;
+  padding: 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  
+  // Логотип
+  .logo-brand {
+    margin-bottom: 0.5rem;
+  }
+
+  // Зелена лінія під хедером
+  &__line {
+    width: 100%;
+    height: 1px;
+    background-color: $primary-color;
+    opacity: 0.3; // На макеті лінія доволі тонка/світла
+  }
+}
+
+.login-form {
+  max-width: 400px;
+  width: 100%;
+  padding: 0 1.5rem;
+  margin-top: 4rem; // Відступ від хедера
+  display: flex;
+  flex-direction: column;
+  align-items: center; // Центруємо все всередині форми
+
+  &__title {
+    font-family: $font-family-serif; // Шрифт із засічками
+    color: $primary-color;
+    font-size: 2.5rem; // Великий розмір
+    margin-bottom: 2.5rem;
+    font-weight: 500;
+  }
+
+  &__error-global {
+    width: 100%;
+    background-color: #fef2f2;
+    color: $error-color;
+    padding: 0.75rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  &__fields {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem; // Відстань між полями
+  }
+
+  .ui-input-wrapper {
+    margin-bottom: 0;
+
+    &__label {
+      color: $text-secondary;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  .ui-input {
+    border-radius: $border-radius-lg; // 10px
+    border: 1px solid #aaa; // Трохи темніший сірий бордер
+    padding: 0.8rem 1rem;
+
+    &:focus {
+      border-color: $primary-color;
+      box-shadow: 0 0 0 1px $primary-color;
+    }
+  }
+
+  // Forgot Password
+  &__forgot-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center; // По центру, як на скріні під інпутом
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  &__forgot-link {
+    color: $primary-color;
+    font-size: 0.9rem;
+    text-decoration: underline; // Підкреслення як на макеті
+    
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  // Кнопки
+  &__actions {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  &__submit-btn {
+    width: 200px; // Кнопка не на всю ширину, а фіксована
+    background-color: $primary-color;
+    border-radius: $border-radius-lg;
+    padding: 0.8rem;
+    font-size: 1.1rem;
+    font-family: $font-family-serif; // Кнопка теж із засічками? На макеті схоже на serif або clean sans.
+    
+    &:hover {
+      background-color: $primary-hover;
+    }
+  }
+
+  &__register-link {
+    color: $primary-color;
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 1rem;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+// Адаптивність
+@media (max-width: 480px) {
+  .login-form {
+    margin-top: 2rem;
+    
+    &__title {
+      font-size: 2rem;
+    }
+    
+    &__submit-btn {
+      width: 100%; // На мобільному кнопку можна зробити на всю ширину
+    }
+  }
+}

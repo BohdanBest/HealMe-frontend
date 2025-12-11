@@ -1,0 +1,120 @@
+@import '@/app/styles/variables';
+
+.doctors-page-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.doctors-main-content {
+  flex: 1;
+  margin-left: 280px;
+  display: flex;
+  flex-direction: column;
+
+  @media (max-width: 768px) {
+    margin-left: 0;
+  }
+}
+
+.doctors-header-section {
+  width: 100%;
+}
+
+.doctors-title {
+  font-family: $font-family-serif;
+  color: #4B9B7D;
+  font-size: 1.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  padding: 1.5rem 3rem;
+  margin: 0;
+  letter-spacing: 0.05em;
+}
+
+.doctors-divider {
+  width: 100%;
+  height: 2px;
+  background-color: #4B9B7D;
+}
+
+.doctors-search-bar {
+  padding: 1.2rem 3rem;
+  display: flex;
+  justify-content: center;
+}
+
+.search-container {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  max-width: 800px;
+}
+
+.search-input-wrapper {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .search-input {
+    width: 100%;
+    padding: 0.6rem 1rem;
+    padding-right: 2.5rem;
+    border: 1px solid #999;
+    border-radius: 6px;
+    font-size: 1rem;
+    outline: none;
+    background-color: #fff;
+
+    &:focus {
+      border-color: #4B9B7D;
+    }
+  }
+
+  .search-icon {
+    position: absolute;
+    right: 0.8rem;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+    opacity: 0.6;
+  }
+}
+
+.filter-btn {
+  cursor: pointer;
+  display: flex;
+  border: none;
+  border-radius: 46px;
+  background: transparent;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #f9f9f9;
+  }
+}
+
+.doctors-container {
+  padding: 3rem;
+  flex: 1;
+  background-color: #fff;
+}
+
+.doctors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.loading-state, .error-state {
+  text-align: center;
+  padding: 4rem;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.error-state {
+  color: $error-color;
+}

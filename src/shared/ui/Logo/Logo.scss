@@ -1,0 +1,19 @@
+.ui-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+  line-height: 0;
+
+  &__image {
+    display: block;
+    object-fit: contain;
+    max-height: 50px;
+    width: auto;
+  }
+
+  &:hover {
+    opacity: 0.8;
+  }
+}

@@ -1,0 +1,92 @@
+@import '@/app/styles/variables';
+
+.doctor-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+    border-color: $primary-color;
+  }
+
+  &__image-placeholder {
+    height: 120px;
+    background-color: #f0fdf4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    .initials {
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: $primary-color;
+      font-family: $font-family-serif;
+      background: #fff;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+  }
+
+  &__content {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__name {
+    font-family: $font-family-serif;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+    color: #111;
+    font-weight: 600;
+  }
+
+  &__spec {
+    font-size: 0.85rem;
+    color: $primary-color;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+  }
+
+  &__bio {
+    font-size: 0.95rem;
+    color: #555;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+    flex: 1; // Розтягує контент, притискаючи футер до низу
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1rem;
+    border-top: 1px solid #f3f4f6;
+  }
+
+  &__price {
+    font-weight: 700;
+    color: #333;
+    font-size: 1.1rem;
+  }
+
+  &__btn {
+    padding: 0.5rem 1.2rem;
+    font-size: 0.9rem;
+  }
+}

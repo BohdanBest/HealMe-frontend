@@ -1,0 +1,19 @@
+.typewriter-content {
+  white-space: pre-wrap; // Важливо! Зберігає абзаци та переноси рядків від AI
+  line-height: 1.6; // Збільшений інтервал для кращої читабельності
+  font-size: 1rem;
+  color: #333;
+
+  .cursor {
+    display: inline-block;
+    color: #27a776; // Зелений курсор
+    animation: blink 1s step-end infinite;
+    font-weight: bold;
+    margin-left: 2px;
+  }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}

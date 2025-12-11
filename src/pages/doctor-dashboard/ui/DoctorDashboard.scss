@@ -1,0 +1,203 @@
+@import '@/app/styles/variables';
+
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #fff; // Змінили на білий, щоб було чисто
+}
+
+.dashboard-content {
+  flex: 1;
+  margin-left: 280px;
+  padding: 2rem 4rem; // Більше відступів збоку
+  
+  &.loading { 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    color: #666;
+  }
+
+  @media (max-width: 768px) { 
+    margin-left: 0; 
+    padding: 1.5rem; 
+  }
+}
+
+// Header
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+  max-width: 1200px; // Ширший хедер
+  margin-left: auto;
+  margin-right: auto;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 1rem;
+
+  .page-main-title {
+    font-family: $font-family-serif;
+    color: $primary-color;
+    font-size: 2.5rem;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .view-profile-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #333;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    transition: all 0.2s;
+
+    &:hover {
+      border-color: $primary-color;
+      color: $primary-color;
+    }
+  }
+}
+
+// Container
+.dashboard-container {
+  display: flex;
+  justify-content: center;
+}
+
+// Card (тепер це просто контейнер без рамок і тіней, щоб було "повітряно")
+.dashboard-card {
+  width: 100%;
+  max-width: 1200px; // Ширший контент
+
+  &.single-card {
+    background: transparent;
+    box-shadow: none;
+    border: none;
+    padding: 0;
+  }
+}
+
+// Form Sections (Прибрали сірий фон)
+.form-group-section {
+  margin-bottom: 1rem; // Більший відступ між секціями
+  
+  .section-header {
+    margin-bottom: 1.5rem;
+    
+    .section-label {
+      font-size: 1.2rem;
+      color: #333;
+      margin-bottom: 0.2rem;
+      font-weight: 600;
+      font-family: $font-family-serif;
+    }
+
+    .section-note {
+      font-size: 0.9rem;
+      color: #888;
+      font-style: italic;
+    }
+  }
+}
+
+// Form Elements
+.dashboard-form {
+  display: flex;
+  flex-direction: column;
+  
+  // Сітка для полів (3 колонки де можливо)
+  .form-grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+
+    @media (max-width: 900px) { grid-template-columns: 1fr 1fr; }
+    @media (max-width: 600px) { grid-template-columns: 1fr; }
+  }
+
+  .form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+
+    @media (max-width: 600px) { grid-template-columns: 1fr; }
+  }
+
+  .ui-input {
+    width: 100%;
+    padding: 0.8rem 1rem; // Трохи більші інпути
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.2s;
+    background-color: #fff;
+    
+    &:focus { 
+      border-color: $primary-color; 
+      outline: none; 
+      box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+    }
+    
+    &.read-only {
+      background-color: #f9fafb; // Дуже легкий сірий для disabled
+      color: #6b7280;
+      cursor: not-allowed;
+      border-color: #e5e7eb;
+    }
+  }
+
+  .textarea {
+    resize: vertical;
+    font-family: inherit;
+    line-height: 1.6;
+    min-height: 150px;
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: flex-start; // Кнопка зліва
+
+    padding-top: 2rem;
+    border-top: 1px solid #eee;
+    
+    .save-btn {
+      padding: 1rem 3rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+  }
+}
+
+// Alerts
+.alert {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  
+  &.success { 
+    background: #f0fdf4; 
+    color: #166534; 
+    border: 1px solid #bbf7d0; 
+  }
+  
+  &.error { 
+    background: #fef2f2; 
+    color: #991b1b; 
+    border: 1px solid #fecaca; 
+  }
+}
