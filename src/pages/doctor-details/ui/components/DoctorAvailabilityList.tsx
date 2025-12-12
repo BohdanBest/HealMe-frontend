@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { type DoctorAvailability } from "@/entities/doctor/model/types";
 import { appointmentApi } from "@/entities/appointment/api/appointmentApi";
 import { getNextDateForDayOfWeek } from "@/shared/lib/dateUtils";
@@ -29,7 +29,6 @@ export const DoctorAvailabilityList = ({
   const [loadingSlotId, setLoadingSlotId] = useState<string | null>(null);
 
   const handleSelect = async (slot: DoctorAvailability) => {
-
     const targetDate = getNextDateForDayOfWeek(slot.dayOfWeek, slot.startTime);
 
     const dateStr = targetDate.toLocaleDateString("en-US", {

@@ -1,4 +1,3 @@
-import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { DoctorDetailsPage } from "./DoctorDetailsPage";
 import { doctorApi } from "@/entities/doctor/api/doctorApi";
@@ -13,7 +12,7 @@ vi.mock("@/entities/doctor/api/doctorApi", async (importOriginal) => {
   return {
     ...actual,
     doctorApi: {
-      ...actual.doctorApi, 
+      ...actual.doctorApi,
       getDoctorById: vi.fn(),
       getDoctorAvailability: vi.fn(),
       getDoctorReviews: vi.fn(),

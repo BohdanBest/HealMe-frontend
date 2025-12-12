@@ -1,4 +1,3 @@
-import React from "react";
 import { Sidebar } from "@/widgets/Sidebar/ui/Sidebar";
 import { ChatWindow } from "@/widgets/ChatWindow/ui/ChatWindow";
 import "./HomePage.scss";

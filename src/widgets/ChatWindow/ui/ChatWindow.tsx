@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { TypewriterText } from "@/shared/ui/TypewriterText/TypewriterText";
 import { useUIStore } from "@/shared/model/uiStore";
 import { useUserStore } from "@/entities/user/model/store"; // <--- 1. Імпорт стору юзера

@@ -1,4 +1,3 @@
-import React from "react";
 import { Button } from "@/shared/ui/Button/Button";
 import "@/shared/ui/Modal/Modal.scss"; // Використовуємо спільні стилі
 

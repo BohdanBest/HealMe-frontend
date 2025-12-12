@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { Sidebar } from "@/widgets/Sidebar/ui/Sidebar";
@@ -6,7 +6,10 @@ import { Sidebar } from "@/widgets/Sidebar/ui/Sidebar";
 import { Button } from "@/shared/ui/Button/Button";
 import { Input } from "@/shared/ui/Input/Input";
 import "./DoctorDashboard.scss";
-import { doctorApi, type UpdateDoctorRequest } from "@/entities/doctor/api/doctorApi";
+import {
+  doctorApi,
+  type UpdateDoctorRequest,
+} from "@/entities/doctor/api/doctorApi";
 
 export const DoctorProfileEditPage = () => {
   const [isLoading, setIsLoading] = useState(true);

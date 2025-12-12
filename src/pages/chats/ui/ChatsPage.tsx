@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Sidebar } from "@/widgets/Sidebar/ui/Sidebar";
-
 
 import { useUserStore } from "@/entities/user/model/store";
 import "./ChatsPage.scss";
@@ -128,8 +127,7 @@ export const ChatsPage = () => {
               <div
                 key={chat.appointmentId}
                 className="chat-list-item"
-                onClick={() => navigate(`/chat/${chat.appointmentId}`)}
-              >
+                onClick={() => navigate(`/chat/${chat.appointmentId}`)}>
                 <div className="chat-avatar">
                   {chat.partnerName.charAt(isDoctor ? 0 : 4) || "?"}
                 </div>

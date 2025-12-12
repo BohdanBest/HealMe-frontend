@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Sidebar } from "@/widgets/Sidebar/ui/Sidebar";
 
 import { useUserStore } from "@/entities/user/model/store";
 import { Button } from "@/shared/ui/Button/Button";
 import "./AppointmentsPage.scss";
-import { AppointmentStatus, type Appointment } from "@/entities/appointment/model/types";
+import {
+  AppointmentStatus,
+  type Appointment,
+} from "@/entities/appointment/model/types";
 import { appointmentApi } from "@/entities/appointment/api/appointmentApi";
 import { patientApi } from "@/entities/patient/api/patientApi";
 import { doctorApi } from "@/entities/doctor/api/doctorApi";

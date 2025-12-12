@@ -1,4 +1,3 @@
-import React from "react";
 import { Logo } from "@/shared/ui/Logo/Logo";
 import "./AuthNavbar.scss";
 

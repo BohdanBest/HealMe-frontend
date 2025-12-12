@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import logoSrc from "@/shared/assets/healme-logo.svg"; // Імпорт файлу як шляху
 import "./Logo.scss";

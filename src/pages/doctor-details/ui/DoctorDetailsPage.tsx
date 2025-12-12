@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Sidebar } from "@/widgets/Sidebar/ui/Sidebar";
 import "./DoctorDetailsPage.scss";
@@ -8,7 +8,11 @@ import { doctorApi } from "@/entities/doctor/api/doctorApi";
 import { useUserStore } from "@/entities/user/model/store";
 import { BookingModal } from "@/features/appointment/ui/BookingModal/BookingModal";
 import { AppointmentConfirmModal } from "@/features/appointment/ui/AppointmentConfirmModal/AppointmentConfirmModal";
-import type { DoctorAvailability, DoctorProfile, DoctorReview } from "@/entities/doctor/model/types";
+import type {
+  DoctorAvailability,
+  DoctorProfile,
+  DoctorReview,
+} from "@/entities/doctor/model/types";
 import type { Appointment } from "@/entities/appointment/model/types";
 import { appointmentApi } from "@/entities/appointment/api/appointmentApi";
 
@@ -288,7 +292,7 @@ export const DoctorDetailsPage = () => {
                         slot.startTime
                       );
                       const isBooked = myAppointments.some((app) => {
-                        if (app.status === 2) return false; 
+                        if (app.status === 2) return false;
 
                         const appDate = new Date(app.startTime);
                         return (

@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { useUserStore } from "@/entities/user/model/store";
 import { Button } from "@/shared/ui/Button/Button";

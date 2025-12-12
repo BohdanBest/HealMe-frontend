@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Sidebar } from "@/widgets/Sidebar/ui/Sidebar";
 import { useUserStore } from "@/entities/user/model/store";
 import { Button } from "@/shared/ui/Button/Button";
@@ -148,8 +148,7 @@ export const AppointmentsPage = () => {
                       <div className="card-actions">
                         {isDoctor &&
                           app.status === AppointmentStatus.Pending && (
-                            <Button
-                              onClick={() => handleConfirm(app.id)}>
+                            <Button onClick={() => handleConfirm(app.id)}>
                               Confirm
                             </Button>
                           )}
