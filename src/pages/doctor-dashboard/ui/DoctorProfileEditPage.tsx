@@ -111,7 +111,6 @@ export const DoctorProfileEditPage = () => {
             <form
               onSubmit={handleSubmit(onProfileSubmit)}
               className="dashboard-form">
-              {/* SECTION 1: MAIN INFO (3 columns) */}
               <div className="form-group-section">
                 <div className="section-header">
                   <div className="section-label">General Information</div>
@@ -144,7 +143,6 @@ export const DoctorProfileEditPage = () => {
                 </div>
               </div>
 
-              {/* SECTION 2: PROFESSIONAL (3 columns) */}
               <div className="form-group-section">
                 <div className="section-header">
                   <div className="section-label">Professional Details</div>

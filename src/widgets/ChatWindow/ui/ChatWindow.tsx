@@ -261,9 +261,6 @@ export const ChatWindow = () => {
               e.preventDefault();
               handleSend(inputValue);
             }}>
-            <button type="button" className="chat-input__plus-btn">
-              +
-            </button>
             <input
               type="text"
               placeholder={
@@ -272,7 +269,7 @@ export const ChatWindow = () => {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               className="chat-input__field"
-              disabled={isLoading} // Можна додати || !user, щоб гості не писали
+              disabled={isLoading}
               autoFocus
             />
             <button

@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Sidebar } from "@/widgets/Sidebar/ui/Sidebar";
-import { Button } from "@/shared/ui/Button/Button";
 import "./DoctorDetailsPage.scss";
-import type { DoctorAvailability, DoctorProfile, DoctorReview } from "@/entities/doctor/model/types";
+
 import { doctorApi } from "@/entities/doctor/api/doctorApi";
+
+import { useUserStore } from "@/entities/user/model/store";
+import { BookingModal } from "@/features/appointment/ui/BookingModal/BookingModal";
+import { AppointmentConfirmModal } from "@/features/appointment/ui/AppointmentConfirmModal/AppointmentConfirmModal";
+import type { DoctorAvailability, DoctorProfile, DoctorReview } from "@/entities/doctor/model/types";
+import type { Appointment } from "@/entities/appointment/model/types";
+import { appointmentApi } from "@/entities/appointment/api/appointmentApi";
 
 const daysOfWeek = [
   "Sunday",
@@ -16,19 +22,69 @@ const daysOfWeek = [
   "Saturday",
 ];
 
+const calculateAppointmentDate = (
+  dayOfWeek: number,
+  startTime: string
+): Date => {
+  const now = new Date();
+  const currentDayOfWeek = now.getDay();
+  let daysUntil = dayOfWeek - currentDayOfWeek;
+
+  if (daysUntil < 0) daysUntil += 7;
+
+  if (daysUntil === 0) {
+    const [hours, minutes] = startTime.split(":").map(Number);
+    const slotTime = new Date(now);
+    slotTime.setHours(hours, minutes, 0, 0);
+    if (slotTime <= now) daysUntil = 7;
+  }
+
+  const targetDate = new Date(now);
+  targetDate.setDate(now.getDate() + daysUntil);
+  const [hours, minutes] = startTime.split(":").map(Number);
+  targetDate.setHours(hours, minutes, 0, 0);
+  targetDate.setSeconds(0);
+  targetDate.setMilliseconds(0);
+
+  return targetDate;
+};
+
 export const DoctorDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
+  // const navigate = useNavigate();
+  const { user } = useUserStore();
 
   const [doctor, setDoctor] = useState<DoctorProfile | null>(null);
   const [availability, setAvailability] = useState<DoctorAvailability[]>([]);
   const [reviews, setReviews] = useState<DoctorReview[]>([]);
 
+  const [myAppointments, setMyAppointments] = useState<Appointment[]>([]);
+
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   const [activeTab, setActiveTab] = useState<"about" | "schedule" | "reviews">(
     "about"
   );
+
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [confirmData, setConfirmData] = useState<{
+    slotId: string;
+    startDate: Date;
+    endDate: Date;
+    dateStr: string;
+    timeStr: string;
+  } | null>(null);
+
+  const fetchMyAppointments = async () => {
+    if (!user) return;
+    try {
+      const apps = await appointmentApi.getMyAppointments();
+      setMyAppointments(apps);
+    } catch (e) {
+      console.error("Failed to load appointments", e);
+    }
+  };
 
   useEffect(() => {
     if (!id) return;
@@ -47,8 +103,10 @@ export const DoctorDetailsPage = () => {
         setDoctor(docData);
         setAvailability(availData);
         setReviews(reviewData);
+
+        await fetchMyAppointments();
       } catch (err) {
-        console.error("Failed to load doctor details", err);
+        console.error(err);
         setError("Failed to load doctor information.");
       } finally {
         setIsLoading(false);
@@ -56,41 +114,84 @@ export const DoctorDetailsPage = () => {
     };
 
     fetchData();
-  }, [id]);
+  }, [id, user]);
 
   const sortedAvailability = [...availability].sort((a, b) => {
     const getDayIndex = (d: number) => (d === 0 ? 7 : d);
     const dayA = getDayIndex(a.dayOfWeek);
     const dayB = getDayIndex(b.dayOfWeek);
-
     if (dayA !== dayB) return dayA - dayB;
     return a.startTime.localeCompare(b.startTime);
   });
 
+  const onSelectSlot = (slot: DoctorAvailability) => {
+    const startDate = calculateAppointmentDate(slot.dayOfWeek, slot.startTime);
+    const endDate = new Date(startDate);
+    const [endH, endM] = slot.endTime.split(":").map(Number);
+    endDate.setHours(endH, endM, 0, 0);
+
+    const dateStr = startDate.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      weekday: "long",
+    });
+    const timeStr = startDate.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    setConfirmData({
+      slotId: slot.id,
+      startDate,
+      endDate,
+      dateStr,
+      timeStr,
+    });
+  };
+
+  const handleConfirmBooking = async () => {
+    if (!confirmData || !doctor) return;
+
+    try {
+      setIsProcessing(true);
+      await appointmentApi.bookAppointment({
+        doctorId: doctor.id,
+        startTime: confirmData.startDate.toISOString(),
+        endTime: confirmData.endDate.toISOString(),
+      });
+
+      // Оновлюємо список записів, щоб слот став сірим
+      await fetchMyAppointments();
+
+      setConfirmData(null);
+      // Не переходимо на іншу сторінку, залишаємось тут
+      alert("Appointment booked successfully!");
+    } catch (e) {
+      console.error(e);
+      alert("Failed to book slot. It might be taken or invalid.");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   const formatTime = (time: string) => time.slice(0, 5);
 
-  if (isLoading) {
+  if (isLoading)
     return (
       <div className="doctor-details-layout">
         <Sidebar />
         <div className="main-content loading">Loading...</div>
       </div>
     );
-  }
-
-  if (error || !doctor) {
+  if (error || !doctor)
     return (
       <div className="doctor-details-layout">
         <Sidebar />
         <div className="main-content error">
           <h2>{error || "Doctor not found"}</h2>
-          <Link to="/doctors">
-            <Button variant="outline">Back to list</Button>
-          </Link>
         </div>
       </div>
     );
-  }
 
   const initials = `${doctor.firstName?.[0] || ""}${
     doctor.lastName?.[0] || ""
@@ -103,6 +204,7 @@ export const DoctorDetailsPage = () => {
       <main className="main-content">
         <div className="doctor-profile-container">
           <div className="profile-header">
+            {/* ... (Header code) ... */}
             <Link to="/doctors" className="back-link">
               <svg
                 width="20"
@@ -127,16 +229,10 @@ export const DoctorDetailsPage = () => {
                 </p>
                 <div className="doctor-meta">
                   <span className="price">${doctor.consultationFee} / hr</span>
-                  <span className="separator">•</span>
                   <span className="license">
                     License: {doctor.medicalInstitutionLicense}
                   </span>
                 </div>
-              </div>
-              <div className="profile-actions">
-                <Button onClick={() => setActiveTab("schedule")}>
-                  Book Appointment
-                </Button>
               </div>
             </div>
           </div>
@@ -161,6 +257,7 @@ export const DoctorDetailsPage = () => {
 
           <div className="tab-content">
             {activeTab === "about" && (
+              /* ... (About content) ... */
               <div className="about-section fade-in">
                 <div className="info-block">
                   <h3>Biography</h3>
@@ -178,30 +275,57 @@ export const DoctorDetailsPage = () => {
               </div>
             )}
 
+            {/* --- SCHEDULE SECTION --- */}
             {activeTab === "schedule" && (
-              <div className="schedule-section">
+              <div className="schedule-section fade-in">
                 <h3>Weekly Availability</h3>
-
                 {sortedAvailability.length > 0 ? (
                   <div className="availability-list">
-                    {sortedAvailability.map((slot) => (
-                      <div key={slot.id} className="availability-item">
-                        <div className="availability-day">
-                          <span className="day-name">
-                            {daysOfWeek[slot.dayOfWeek]}
-                          </span>
-                        </div>
+                    {sortedAvailability.map((slot) => {
+                      // 1. Рахуємо, коли буде цей слот наступного разу
+                      const potentialDate = calculateAppointmentDate(
+                        slot.dayOfWeek,
+                        slot.startTime
+                      );
+                      const isBooked = myAppointments.some((app) => {
+                        if (app.status === 2) return false; 
 
-                        <div className="availability-time">
-                          <span className="time-badge">
-                            {formatTime(slot.startTime)} -{" "}
-                            {formatTime(slot.endTime)}
-                          </span>
-                        </div>
+                        const appDate = new Date(app.startTime);
+                        return (
+                          app.doctorId === doctor.id &&
+                          Math.abs(
+                            appDate.getTime() - potentialDate.getTime()
+                          ) < 60000
+                        );
+                      });
 
-                        <button className="book-slot-btn">Select</button>
-                      </div>
-                    ))}
+                      return (
+                        <div
+                          key={slot.id}
+                          className={`availability-item ${
+                            isBooked ? "disabled" : ""
+                          }`}>
+                          <div className="availability-day">
+                            <span className="day-name">
+                              {daysOfWeek[slot.dayOfWeek]}
+                            </span>
+                          </div>
+                          <div className="availability-time">
+                            <span className="time-badge">
+                              {formatTime(slot.startTime)} -{" "}
+                              {formatTime(slot.endTime)}
+                            </span>
+                          </div>
+
+                          <button
+                            className="book-slot-btn"
+                            onClick={() => onSelectSlot(slot)}
+                            disabled={isBooked}>
+                            {isBooked ? "Booked" : "Select"}
+                          </button>
+                        </div>
+                      );
+                    })}
                   </div>
                 ) : (
                   <div className="empty-state">
@@ -212,6 +336,7 @@ export const DoctorDetailsPage = () => {
             )}
 
             {activeTab === "reviews" && (
+              /* ... (Reviews content) ... */
               <div className="reviews-section fade-in">
                 <h3>Patient Reviews</h3>
                 {reviews.length > 0 ? (
@@ -242,6 +367,27 @@ export const DoctorDetailsPage = () => {
             )}
           </div>
         </div>
+
+        {/* Modals */}
+        <BookingModal
+          doctorId={doctor.id}
+          isOpen={isBookingOpen}
+          onClose={() => setIsBookingOpen(false)}
+          onSuccess={() => {
+            fetchMyAppointments(); // Оновлюємо, якщо забронювали через модалку
+            alert("Booked!");
+          }}
+        />
+
+        <AppointmentConfirmModal
+          isOpen={!!confirmData}
+          onClose={() => setConfirmData(null)}
+          onConfirm={handleConfirmBooking}
+          isLoading={isProcessing}
+          doctorName={`${doctor.firstName} ${doctor.lastName}`}
+          dateStr={confirmData?.dateStr || ""}
+          timeStr={confirmData?.timeStr || ""}
+        />
       </main>
     </div>
   );

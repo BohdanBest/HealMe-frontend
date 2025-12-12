@@ -16,11 +16,9 @@ export const ResetPasswordForm = () => {
   const { resetPassword, isLoading, error, success } = useResetPassword();
   const [searchParams] = useSearchParams();
 
-  // Отримуємо email та token з URL
   const emailFromUrl = searchParams.get("email") || "";
   const tokenFromUrl = searchParams.get("token") || "";
 
-  // --- ВИПРАВЛЕННЯ: Прибрали <ResetPasswordFormData> ---
   const {
     register,
     handleSubmit,
@@ -36,7 +34,6 @@ export const ResetPasswordForm = () => {
     },
   });
 
-  // Оновлюємо значення форми, якщо URL параметри завантажились із затримкою
   useEffect(() => {
     if (emailFromUrl) setValue("email", emailFromUrl);
     if (tokenFromUrl) setValue("token", tokenFromUrl);
@@ -87,7 +84,6 @@ export const ResetPasswordForm = () => {
             </div>
           )}
 
-          {/* Приховані поля */}
           <input type="hidden" {...register("email")} />
           <input type="hidden" {...register("token")} />
 

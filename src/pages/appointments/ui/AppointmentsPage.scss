@@ -1,0 +1,251 @@
+@import "@/app/styles/variables";
+
+.appointments-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #fff; // Білий фон, як у профілі
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 280px;
+  padding: 3rem 5%; // Широкі відступи
+
+  &.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+  }
+
+  @media (max-width: 768px) {
+    margin-left: 0;
+    padding: 1.5rem;
+  }
+}
+
+.appointments-container {
+  width: 100%;
+  max-width: 1000px; // Обмежуємо ширину контенту
+  margin: 0 auto;
+}
+
+// HEADER (Як у профілі)
+.page-header {
+  margin-bottom: 3rem;
+
+  .page-title {
+    font-family: $font-family-serif;
+    color: $primary-color;
+    font-size: 3rem;
+    font-weight: 500;
+    margin: 0 0 1rem 0;
+  }
+
+  .header-divider {
+    width: 100%;
+    height: 1px;
+    background-color: #f0f0f0;
+  }
+}
+
+// LIST (Вертикальний список)
+.appointments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; // Відстань між картками
+}
+
+// CARD (На всю ширину)
+.appointment-card {
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 1.5rem 2rem;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+  width: 100%; // Розтягуємо на всю ширину контейнера
+
+  &:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    border-color: darken(#e5e7eb, 5%);
+    transform: translateY(-2px);
+  }
+
+  &.past {
+    opacity: 0.6;
+    background-color: #f9fafb;
+    filter: grayscale(0.8);
+    &:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+  &.cancelled-card {
+// Легкий червоний відтінок
+    border-color: #fecaca;
+
+    .date-box {
+      background-color: #fff;
+      color: #999;
+      border-color: #eee;
+    }
+  }
+
+  // DATE (LEFT)
+  .card-date-section {
+    margin-right: 2rem;
+
+    .date-box {
+      background-color: #f0fdf4;
+      color: $primary-color;
+      padding: 0.8rem 1rem;
+      border-radius: 12px;
+      text-align: center;
+      min-width: 70px;
+      border: 1px solid #dcfce7;
+
+      .day {
+        display: block;
+        font-size: 1.6rem;
+        font-weight: 700;
+        line-height: 1;
+      }
+      .month {
+        display: block;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-top: 0.2rem;
+        letter-spacing: 0.5px;
+      }
+    }
+  }
+
+  // INFO (CENTER)
+  .card-info-section {
+    flex: 1; // Займає весь вільний простір
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .time-range {
+      font-size: 0.95rem;
+      color: #6b7280;
+      margin-bottom: 0.4rem;
+    }
+
+    .person-name {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #1f2937;
+      font-family: $font-family-serif;
+    }
+  }
+
+  // ACTIONS (RIGHT)
+  .card-actions-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1rem;
+    min-width: 140px;
+
+    .status-badge {
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      border: 1px solid transparent;
+
+      &.pending {
+        background: #fffbeb;
+        color: #d97706;
+        border-color: #fcd34d;
+      }
+      &.confirmed {
+        background: #ecfdf5;
+        color: #059669;
+        border-color: #a7f3d0;
+      }
+      &.cancelled {
+        background: #fef2f2;
+        color: #dc2626;
+        border-color: #fecaca;
+      }
+    }
+
+    .action-buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.5rem;
+
+      .cancel-link {
+        background: none;
+        border: none;
+        color: #ef4444;
+        font-size: 0.9rem;
+        cursor: pointer;
+        text-decoration: underline;
+        transition: color 0.2s;
+
+        &:hover {
+          color: #b91c1c;
+        }
+        &:disabled {
+          color: #ccc;
+          cursor: not-allowed;
+          text-decoration: none;
+        }
+      }
+
+      .confirm-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  // ADAPTIVE
+  @media (max-width: 700px) {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.5rem;
+
+    .card-date-section {
+      margin-bottom: 1rem;
+    }
+    .card-info-section {
+      margin-bottom: 1rem;
+      width: 100%;
+    }
+
+    .card-actions-section {
+      width: 100%;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+
+      .action-buttons {
+        flex-direction: row;
+        align-items: center;
+      }
+    }
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem;
+  background: #f9fafb;
+  border-radius: 16px;
+  border: 1px dashed #d1d5db;
+  color: #6b7280;
+
+  p {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+  }
+}

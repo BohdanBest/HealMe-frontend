@@ -1,0 +1,116 @@
+@import '@/app/styles/variables';
+
+.chats-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #fff;
+}
+
+.content {
+  flex: 1;
+  margin-left: 280px;
+  padding: 2rem 4rem; // Відступи
+  
+  &.loading { display: flex; align-items: center; justify-content: center; color: #666; }
+  
+  @media (max-width: 768px) { margin-left: 0; padding: 1rem; }
+}
+
+.page-header {
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 1rem;
+
+  .title {
+    font-family: $font-family-serif;
+    color: $primary-color; // Зелений
+    font-size: 2.5rem;
+    margin: 0;
+  }
+}
+
+.chats-list-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 800px; // Обмежуємо ширину для зручності
+}
+
+.chat-list-item {
+  display: flex;
+  align-items: center;
+  padding: 1.2rem;
+  border-bottom: 1px solid #f5f5f5;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-radius: 12px; // Ефект при ховері
+
+  &:hover {
+    background-color: #f9fafb;
+    .open-arrow { color: $primary-color; transform: translateX(3px); }
+  }
+
+  // Кружечок аватара
+  .chat-avatar {
+    width: 56px;
+    height: 56px;
+    background-color: #e0f2fe; // Світло-синій (або можна зелений #dcfce7)
+    color: #0369a1; // Темно-синій (або зелений #166534)
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    font-family: $font-family-serif;
+    margin-right: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .chat-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+
+    .info-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+
+      .partner-name {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #1f2937;
+      }
+      .chat-date {
+        font-size: 0.85rem;
+        color: #9ca3af;
+      }
+    }
+
+    .info-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .partner-subtext {
+        font-size: 0.95rem;
+        color: #6b7280;
+      }
+      .open-arrow {
+        font-size: 1.5rem;
+        color: #d1d5db;
+        line-height: 0.5;
+        transition: all 0.2s;
+        margin-top: -5px; // Трохи рівняємо
+      }
+    }
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem;
+  color: #9ca3af;
+  font-size: 1.1rem;
+}

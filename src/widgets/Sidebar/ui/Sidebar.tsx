@@ -69,18 +69,14 @@ export const Sidebar = () => {
               className={`nav-group__list ${
                 isProfileOpen ? "expanded" : "collapsed"
               }`}>
-              {/* --- ОНОВЛЕНИЙ ПУНКТ MY AI-CHATS --- */}
-              {/* Ми використовуємо NavLink to="/", оскільки там живе чат */}
               <NavLink
                 to="/"
                 className="nav-item"
                 onClick={(e) => {
-                  // Якщо ми вже на головній, просто перемикаємо сайдбар
                   if (window.location.pathname === "/") {
-                    e.preventDefault(); // Щоб не перезавантажувати роут
+                    e.preventDefault();
                     toggleAiHistory();
                   } else {
-                    // Якщо ми на іншій сторінці, переходимо на чат і відкриваємо історію
                     openAiHistory();
                   }
                 }}>
@@ -88,7 +84,7 @@ export const Sidebar = () => {
                 <LinkArrowIcon />
               </NavLink>
 
-              <NavLink to="/doctor-chats" className="nav-item">
+              <NavLink to="/chats" className="nav-item">
                 <span>Chats with doctors</span>
                 <LinkArrowIcon />
               </NavLink>
@@ -119,7 +115,6 @@ export const Sidebar = () => {
           </NavLink>
         </div>
 
-        {/* Цей пункт теж веде на чат, можна також додати відкриття історії */}
         <div className="nav-group">
           <NavLink
             to="/"

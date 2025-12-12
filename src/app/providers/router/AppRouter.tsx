@@ -9,9 +9,11 @@ import { ResetPasswordForm } from "@/features/auth/reset-password/ui/ResetPasswo
 import { DoctorsPage } from "@/pages/doctors/ui/DoctorsPage";
 import { DoctorDetailsPage } from "@/pages/doctor-details/ui/DoctorDetailsPage";
 import { PatientProfilePage } from "@/pages/profile/ui/PatientProfilePage";
-
+import { AppointmentsPage } from "@/pages/appointments/ui/AppointmentsPage";
 import { DoctorSchedulePage } from "@/pages/doctor-schedule/ui/DoctorSchedulePage";
 import { DoctorProfileEditPage } from "@/pages/doctor-dashboard/ui/DoctorProfileEditPage";
+import { ChatPage } from "@/pages/chat/ui/ChatPage";
+import { ChatsPage } from "@/pages/chats/ui/ChatsPage";
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const isAuth = useUserStore((state) => state.isAuth);
@@ -80,7 +82,7 @@ export const AppRouter = () => {
           </PrivateRoute>
         }
       />
-      
+
       <Route
         path="/doctor/me"
         element={
@@ -94,6 +96,30 @@ export const AppRouter = () => {
         element={
           <PrivateRoute>
             <DoctorSchedulePage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/appointments"
+        element={
+          <PrivateRoute>
+            <AppointmentsPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/chat/:appointmentId"
+        element={
+          <PrivateRoute>
+            <ChatPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/chats"
+        element={
+          <PrivateRoute>
+            <ChatsPage />
           </PrivateRoute>
         }
       />
