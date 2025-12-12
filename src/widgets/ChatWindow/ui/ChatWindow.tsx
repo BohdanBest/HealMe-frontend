@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { TypewriterText } from "@/shared/ui/TypewriterText/TypewriterText";
 import { useUIStore } from "@/shared/model/uiStore";
-import { useUserStore } from "@/entities/user/model/store"; // <--- 1. Імпорт стору юзера
+import { useUserStore } from "@/entities/user/model/store";
 import "./ChatWindow.scss";
 import type { AiSession } from "@/entities/ai-chat/model/types";
 import { aiChatApi } from "@/entities/ai-chat/api/aiChatApi";
@@ -15,8 +15,8 @@ interface UiMessage {
 }
 
 export const ChatWindow = () => {
-  const { user } = useUserStore();
   const { isAiHistoryOpen, closeAiHistory } = useUIStore();
+  const { user } = useUserStore(); // Перевіряємо наявність юзера
 
   const [messages, setMessages] = useState<UiMessage[]>([]);
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
@@ -27,10 +27,12 @@ export const ChatWindow = () => {
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // Завантаження історії (ТІЛЬКИ якщо є юзер)
   useEffect(() => {
     if (user) {
       loadSessions();
     } else {
+      // Якщо юзера немає, очищаємо сесії, але залишаємо поточний чат
       setSessions([]);
     }
   }, [user]);
@@ -44,7 +46,7 @@ export const ChatWindow = () => {
       const data = await aiChatApi.getSessions();
       setSessions(data);
     } catch (e) {
-      console.error("Failed to load history", e);
+      console.error(e);
     }
   };
 
@@ -52,7 +54,6 @@ export const ChatWindow = () => {
     try {
       setIsLoading(true);
       setCurrentSessionId(sessionId);
-
       const history = await aiChatApi.getSessionMessages(sessionId);
 
       const uiMessages: UiMessage[] = history.flatMap((msg) => [
@@ -77,12 +78,10 @@ export const ChatWindow = () => {
           isAnimated: false,
         },
       ]);
-
       setMessages(uiMessages);
-
       if (window.innerWidth < 768) closeAiHistory();
     } catch (e) {
-      console.error("Failed to load chat messages", e);
+      console.error(e);
     } finally {
       setIsLoading(false);
     }
@@ -96,11 +95,8 @@ export const ChatWindow = () => {
 
   const handleSend = async (text: string) => {
     if (!text.trim()) return;
-    if (!user) {
-      alert("Please login to use AI Chat.");
-      return;
-    }
 
+    // 1. Оптимістичне додавання повідомлення
     const tempId = Date.now().toString();
     setMessages((prev) => [
       ...prev,
@@ -120,36 +116,63 @@ export const ChatWindow = () => {
     setIsLoading(true);
 
     try {
-      const response = await aiChatApi.sendMessage({
-        sessionId: currentSessionId || undefined,
-        message: text,
-      });
+      if (user) {
+        const response = await aiChatApi.sendMessage({
+          sessionId: currentSessionId || undefined,
+          message: text,
+        });
 
-      if (!currentSessionId) {
-        setCurrentSessionId(response.sessionId);
-        await loadSessions();
+        if (!currentSessionId) {
+          setCurrentSessionId(response.sessionId);
+          await loadSessions();
+        }
+
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: response.messageId,
+            text: response.aiResponse,
+            isUser: false,
+            time: new Date(response.timestamp).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+            isAnimated: true,
+          },
+        ]);
+      } else {
+        let guestChatId = currentSessionId;
+        if (!guestChatId) {
+          guestChatId = crypto.randomUUID
+            ? crypto.randomUUID()
+            : `guest_${Date.now()}`;
+          setCurrentSessionId(guestChatId);
+        }
+
+        // Шлемо напряму
+        const response = await aiChatApi.sendMessageGuest(guestChatId, text);
+
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: `ai_${Date.now()}`,
+            text: response.ai_response,
+            isUser: false,
+            time: new Date().toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+            isAnimated: true,
+          },
+        ]);
       }
-
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: response.messageId,
-          text: response.aiResponse,
-          isUser: false,
-          time: new Date(response.timestamp).toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-          isAnimated: true,
-        },
-      ]);
     } catch (error) {
       console.error("AI Error:", error);
       setMessages((prev) => [
         ...prev,
         {
           id: Date.now().toString(),
-          text: "Error connecting to server. Please try again.",
+          text: "Sorry, I can't connect to the AI right now.",
           isUser: false,
           time: "",
           isAnimated: false,
@@ -159,24 +182,18 @@ export const ChatWindow = () => {
       setIsLoading(false);
     }
   };
-  const suggestions = [
-    "I have a headache and nausea",
-    "Check my skin rash",
-    "Find a cardiologist nearby",
-    "What are symptoms of flu?",
-  ];
 
   return (
     <div className="chat-layout-wrapper">
+      {/* Sidebar показуємо ТІЛЬКИ для авторизованих */}
       {user && (
         <aside
           className={`chat-history ${isAiHistoryOpen ? "open" : "closed"}`}>
           <div className="history-header">
             <button className="new-chat-btn" onClick={startNewChat}>
-              <span>+ New Chat</span>
+              + New Chat
             </button>
           </div>
-
           <div className="history-list">
             {sessions.length === 0 ? (
               <div className="history-empty">No history yet</div>
@@ -189,9 +206,7 @@ export const ChatWindow = () => {
                   }`}
                   onClick={() => selectSession(session.id)}>
                   <span className="icon">💬</span>
-                  <span className="title" title={session.title}>
-                    {session.title || "New Conversation"}
-                  </span>
+                  <span className="title">{session.title || "Chat"}</span>
                 </div>
               ))
             )}
@@ -199,7 +214,9 @@ export const ChatWindow = () => {
         </aside>
       )}
 
+      {/* Main Chat */}
       <div className="chat-window">
+        {/* ... (решта коду верстки без змін) ... */}
         <div className="chat-header">
           <h2 className="chat-header__title">AI-CHAT</h2>
           <div className="chat-header__line"></div>
@@ -211,16 +228,17 @@ export const ChatWindow = () => {
               <h2 className="chat-empty-state__greeting">
                 How can I help you today?
               </h2>
-
               <div className="chat-suggestions">
-                {suggestions.map((s, i) => (
-                  <button
-                    key={i}
-                    className="suggestion-chip"
-                    onClick={() => handleSend(s)}>
-                    {s} <span className="arrow">→</span>
-                  </button>
-                ))}
+                {["Headache", "Flu symptoms", "Skin rash", "Cardiologist"].map(
+                  (s, i) => (
+                    <button
+                      key={i}
+                      className="suggestion-chip"
+                      onClick={() => handleSend(s)}>
+                      {s} →
+                    </button>
+                  )
+                )}
               </div>
             </div>
           ) : (
@@ -261,11 +279,12 @@ export const ChatWindow = () => {
               e.preventDefault();
               handleSend(inputValue);
             }}>
+            <button type="button" className="chat-input__plus-btn">
+              +
+            </button>
             <input
               type="text"
-              placeholder={
-                isLoading ? "AI is thinking..." : "Type a message..."
-              }
+              placeholder={isLoading ? "Thinking..." : "Type a message..."}
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               className="chat-input__field"
@@ -282,9 +301,7 @@ export const ChatWindow = () => {
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round">
+                strokeWidth="2">
                 <line x1="22" y1="2" x2="11" y2="13"></line>
                 <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
               </svg>
