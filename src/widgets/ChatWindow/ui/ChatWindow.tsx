@@ -16,8 +16,7 @@ interface UiMessage {
 
 export const ChatWindow = () => {
   const { isAiHistoryOpen, closeAiHistory } = useUIStore();
-  const { user } = useUserStore(); // Перевіряємо наявність юзера
-
+  const { user } = useUserStore();
   const [messages, setMessages] = useState<UiMessage[]>([]);
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
   const [sessions, setSessions] = useState<AiSession[]>([]);
@@ -182,6 +181,12 @@ export const ChatWindow = () => {
       setIsLoading(false);
     }
   };
+  const suggestions = [
+    "I have a headache and nausea",
+    "Chest pain when I exercise",
+    "Feeling very tired all the time",
+    "Experiencing shortness of breath",
+  ];
 
   return (
     <div className="chat-layout-wrapper">
@@ -229,16 +234,14 @@ export const ChatWindow = () => {
                 How can I help you today?
               </h2>
               <div className="chat-suggestions">
-                {["Headache", "Flu symptoms", "Skin rash", "Cardiologist"].map(
-                  (s, i) => (
-                    <button
-                      key={i}
-                      className="suggestion-chip"
-                      onClick={() => handleSend(s)}>
-                      {s} →
-                    </button>
-                  )
-                )}
+                {suggestions.map((s, i) => (
+                  <button
+                    key={i}
+                    className="suggestion-chip"
+                    onClick={() => handleSend(s)}>
+                    {s} →
+                  </button>
+                ))}
               </div>
             </div>
           ) : (
