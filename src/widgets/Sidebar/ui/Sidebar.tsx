@@ -42,7 +42,7 @@ const GroupChevronIcon = ({ isOpen }: { isOpen: boolean }) => (
 
 export const Sidebar = () => {
   const { user, logout } = useUserStore();
-  const { toggleAiHistory, openAiHistory } = useUIStore(); // <--- Хук UI
+  const { toggleAiHistory, openAiHistory, isSidebarOpen, closeSidebar } = useUIStore(); // <--- Хук UI
   const [isProfileOpen, setIsProfileOpen] = useState(true);
 
   const isDoctor = user?.roles?.includes("Doctor");
@@ -50,98 +50,107 @@ export const Sidebar = () => {
   const toggleProfile = () => setIsProfileOpen(!isProfileOpen);
 
   return (
-    <aside className="app-sidebar">
-      <div className="app-sidebar__logo">
-        <div className="logo-white-filter">
-          <Logo width={160} height={50} />
+    <>
+      {isSidebarOpen && (
+        <div className="sidebar-overlay" onClick={closeSidebar}></div>
+      )}
+      <aside className={`app-sidebar ${isSidebarOpen ? "open" : ""}`}>
+        <div className="app-sidebar__logo">
+          <div className="logo-white-filter">
+            <Logo width={160} height={50} />
+          </div>
         </div>
-      </div>
 
-      <nav className="app-sidebar__nav">
-        {user && (
-          <div className="nav-group">
-            <div className="nav-group__header" onClick={toggleProfile}>
-              <h3 className="nav-group__title">Profile</h3>
-              <GroupChevronIcon isOpen={isProfileOpen} />
-            </div>
+        <nav className="app-sidebar__nav">
+          {user && (
+            <div className="nav-group">
+              <div className="nav-group__header" onClick={toggleProfile}>
+                <h3 className="nav-group__title">Profile</h3>
+                <GroupChevronIcon isOpen={isProfileOpen} />
+              </div>
 
-            <div
-              className={`nav-group__list ${
-                isProfileOpen ? "expanded" : "collapsed"
-              }`}>
-              <NavLink
-                to="/"
-                className="nav-item"
-                onClick={(e) => {
-                  if (window.location.pathname === "/") {
-                    e.preventDefault();
-                    toggleAiHistory();
-                  } else {
-                    openAiHistory();
-                  }
-                }}>
-                <span>My AI-Chats</span>
-                <LinkArrowIcon />
-              </NavLink>
-
-              <NavLink to="/chats" className="nav-item">
-                <span>{isDoctor ? "Chats with patients" : "Chats with doctors"}</span>
-                <LinkArrowIcon />
-              </NavLink>
-
-
-              <NavLink to="/appointments" className="nav-item">
-                <span>My appointments</span>
-                <LinkArrowIcon />
-              </NavLink>
-
-              <NavLink to={profileLink} className="nav-item">
-                <span>My profile</span>
-                <LinkArrowIcon />
-              </NavLink>
-
-              {isDoctor && (
-                <NavLink to="/doctor/schedule" className="nav-item">
-                  <span>Manage Schedule</span>
+              <div
+                className={`nav-group__list ${
+                  isProfileOpen ? "expanded" : "collapsed"
+                }`}>
+                <NavLink
+                  to="/"
+                  className="nav-item"
+                  onClick={(e) => {
+                    if (window.location.pathname === "/") {
+                      e.preventDefault();
+                      toggleAiHistory();
+                    } else {
+                      openAiHistory();
+                    }
+                    closeSidebar();
+                  }}>
+                  <span>My AI-Chats</span>
                   <LinkArrowIcon />
                 </NavLink>
-              )}
+
+                <NavLink to="/chats" className="nav-item" onClick={closeSidebar}>
+                  <span>{isDoctor ? "Chats with patients" : "Chats with doctors"}</span>
+                  <LinkArrowIcon />
+                </NavLink>
+
+
+                <NavLink to="/appointments" className="nav-item" onClick={closeSidebar}>
+                  <span>My appointments</span>
+                  <LinkArrowIcon />
+                </NavLink>
+
+                <NavLink to={profileLink} className="nav-item" onClick={closeSidebar}>
+                  <span>My profile</span>
+                  <LinkArrowIcon />
+                </NavLink>
+
+                {isDoctor && (
+                  <NavLink to="/doctor/schedule" className="nav-item" onClick={closeSidebar}>
+                    <span>Manage Schedule</span>
+                    <LinkArrowIcon />
+                  </NavLink>
+                )}
+              </div>
             </div>
+          )}
+
+          <div className="nav-group">
+            <NavLink to="/doctors" className="nav-group__single-link" onClick={closeSidebar}>
+              Doctors
+            </NavLink>
           </div>
-        )}
 
-        <div className="nav-group">
-          <NavLink to="/doctors" className="nav-group__single-link">
-            Doctors
-          </NavLink>
-        </div>
-
-        <div className="nav-group">
-          <NavLink
-            to="/"
-            className="nav-group__single-link"
-            onClick={openAiHistory}>
-            AI-Chat
-          </NavLink>
-        </div>
-      </nav>
-
-      <div className="app-sidebar__footer">
-        {user ? (
-          <button onClick={logout} className="logout-btn">
-            Logout
-          </button>
-        ) : (
-          <div className="guest-auth-buttons">
-            <Link to="/login" className="guest-auth-btn sign-in">
-              Sign In
-            </Link>
-            <Link to="/register" className="guest-auth-btn register">
-              Register
-            </Link>
+          <div className="nav-group">
+            <NavLink
+              to="/"
+              className="nav-group__single-link"
+              onClick={() => {
+                openAiHistory();
+                closeSidebar();
+              }}>
+              AI-Chat
+            </NavLink>
           </div>
-        )}
-      </div>
-    </aside>
+        </nav>
+
+        <div className="app-sidebar__footer">
+          {user ? (
+            <button onClick={logout} className="logout-btn">
+              Logout
+            </button>
+          ) : (
+            <div className="guest-auth-buttons">
+              <Link to="/login" className="guest-auth-btn sign-in" onClick={closeSidebar}>
+                Sign In
+              </Link>
+              <Link to="/register" className="guest-auth-btn register" onClick={closeSidebar}>
+                Register
+              </Link>
+            </div>
+          )}
+        </div>
+      </aside>
+    </>
   );
 };
