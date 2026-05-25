@@ -22,6 +22,8 @@ export interface DoctorReview {
   id: string;
   doctorId: string;
   patientId: string;
+  patientFirstName?: string;
+  patientLastName?: string;
   rating: number;
   comment: string;
   createdAt: string;

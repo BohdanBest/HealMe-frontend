@@ -12,6 +12,7 @@ import { appointmentApi } from "@/entities/appointment/api/appointmentApi";
 import { patientApi } from "@/entities/patient/api/patientApi";
 import { doctorApi } from "@/entities/doctor/api/doctorApi";
 import { Link } from "react-router-dom";
+import { ReviewModal } from "./components/ReviewModal";
 
 export const AppointmentsPage = () => {
   const { user } = useUserStore();
@@ -24,6 +25,9 @@ export const AppointmentsPage = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [actionLoadingId, setActionLoadingId] = useState<string | null>(null);
+  const [reviewAppointmentId, setReviewAppointmentId] = useState<string | null>(
+    null
+  );
 
   const fetchAppointments = async () => {
     try {
@@ -121,6 +125,18 @@ export const AppointmentsPage = () => {
     }
   };
 
+  const handleComplete = async (id: string) => {
+    try {
+      setActionLoadingId(id);
+      await appointmentApi.completeAppointment(id);
+      await fetchAppointments();
+    } catch {
+      alert("Error completing appointment");
+    } finally {
+      setActionLoadingId(null);
+    }
+  };
+
   const renderStatus = (status: AppointmentStatus) => {
     switch (status) {
       case AppointmentStatus.Pending:
@@ -129,10 +145,13 @@ export const AppointmentsPage = () => {
         return <span className="status-badge confirmed">CONFIRMED</span>;
       case AppointmentStatus.Cancelled:
         return <span className="status-badge cancelled">CANCELLED</span>;
+      case AppointmentStatus.Completed:
+        return <span className="status-badge completed">COMPLETED</span>;
       default:
         return null;
     }
   };
+
 
   if (isLoading)
     return (
@@ -240,6 +259,16 @@ export const AppointmentsPage = () => {
                               {actionLoadingId === app.id ? "..." : "Confirm"}
                             </Button>
                           )}
+                        {isDoctor &&
+                          app.status === AppointmentStatus.Confirmed &&
+                          isPast && (
+                            <Button
+                              className="complete-btn"
+                              onClick={() => handleComplete(app.id)}
+                              disabled={actionLoadingId === app.id}>
+                              {actionLoadingId === app.id ? "..." : "Complete"}
+                            </Button>
+                          )}
                         {app.status !== AppointmentStatus.Cancelled && (
                           <Link
                             to={`/chat/${app.id}`}
@@ -256,6 +285,21 @@ export const AppointmentsPage = () => {
                               <span>💬</span> Chat
                             </Button>
                           </Link>
+                        )}
+                        {!isDoctor && app.status === AppointmentStatus.Completed && (
+                          <Button
+                            variant="outline"
+                            style={{
+                              padding: "0.5rem 1rem",
+                              fontSize: "0.9rem",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "0.5rem",
+                            }}
+                            onClick={() => setReviewAppointmentId(app.id)}
+                          >
+                            <span>⭐</span> Review
+                          </Button>
                         )}
                         {app.status !== AppointmentStatus.Cancelled &&
                           !isPast && (
@@ -275,6 +319,15 @@ export const AppointmentsPage = () => {
           </div>
         </div>
       </main>
+
+      <ReviewModal
+        isOpen={reviewAppointmentId !== null}
+        appointmentId={reviewAppointmentId}
+        onClose={() => {
+          setReviewAppointmentId(null);
+          fetchAppointments();
+        }}
+      />
     </div>
   );
 };

@@ -3,7 +3,9 @@ export const AppointmentStatus = {
   Pending: 0,
   Confirmed: 1,
   Cancelled: 2,
+  Completed: 3,
 } as const;
+
 
 // Створюємо тип на основі значень об'єкта (для типізації)
 export type AppointmentStatus =

@@ -19,8 +19,15 @@ export interface AuthResult {
   success: boolean;
   message: string;
   token: string;
+  refreshToken?: string;
   user?: UserInfo;
 }
+
+export interface TokenRequest {
+  token: string;
+  refreshToken: string;
+}
+
 
 
 export interface LoginRequest {

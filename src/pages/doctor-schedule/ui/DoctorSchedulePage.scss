@@ -171,6 +171,19 @@
     gap: 1rem;
     
     .add-btn { width: 100%; }
+    
+    .drawer-form-actions {
+      display: flex;
+      gap: 0.8rem;
+      width: 100%;
+      
+      .add-btn {
+        flex: 2;
+      }
+      .cancel-edit-btn {
+        flex: 1;
+      }
+    }
   }
 
   .drawer-slots-list {
@@ -183,14 +196,47 @@
 
   .drawer-slot-item {
     background-color: #f9fafb;
-    padding: 1rem;
+    padding: 0.8rem 1rem;
     border-radius: 8px;
     border: 1px solid #eee;
     color: #333;
     font-weight: 500;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
+
+    .slot-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .slot-action-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 0.3rem;
+      border-radius: 6px;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background-color: #e5e7eb;
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      &.delete-btn:hover {
+        background-color: #fecaca;
+      }
+    }
   }
+
 
   .no-slots { color: #999; font-style: italic; text-align: center; }
 }

@@ -38,10 +38,10 @@ export const doctorApi = {
   },
 
   getDoctorReviews: async (id: string): Promise<DoctorReview[]> => {
-    const response = await apiInstance.get<DoctorReview[]>(
+    const response = await apiInstance.get<{ items: DoctorReview[] }>(
       `/api/doctors/${id}/reviews`
     );
-    return response.data;
+    return response.data.items || [];
   },
   getMyProfile: async (): Promise<DoctorProfile> => {
     const response = await apiInstance.get<DoctorProfile>("/api/doctors/me");
@@ -67,4 +67,20 @@ export const doctorApi = {
     );
     return response.data;
   },
+
+  updateAvailability: async (
+    id: string,
+    data: { startTime: string; endTime: string }
+  ): Promise<DoctorAvailability> => {
+    const response = await apiInstance.put<DoctorAvailability>(
+      `/api/doctors/me/availability/${id}`,
+      data
+    );
+    return response.data;
+  },
+
+  deleteAvailability: async (id: string): Promise<void> => {
+    await apiInstance.delete(`/api/doctors/me/availability/${id}`);
+  },
 };
+

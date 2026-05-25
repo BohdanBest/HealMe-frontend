@@ -51,4 +51,21 @@ export const aiChatApi = {
     );
     return response.data;
   },
+
+  downloadDoctorPdf: async (sessionId: string): Promise<Blob> => {
+    const response = await apiInstance.get(
+      `/api/ai/sessions/${sessionId}/pdf/doctor`,
+      { responseType: "blob" }
+    );
+    return response.data;
+  },
+
+  downloadPatientPdf: async (sessionId: string): Promise<Blob> => {
+    const response = await apiInstance.get(
+      `/api/ai/sessions/${sessionId}/pdf/patient`,
+      { responseType: "blob" }
+    );
+    return response.data;
+  },
 };
+

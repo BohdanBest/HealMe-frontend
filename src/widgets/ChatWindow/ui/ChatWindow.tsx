@@ -23,6 +23,45 @@ export const ChatWindow = () => {
 
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isDownloadingDoctor, setIsDownloadingDoctor] = useState(false);
+  const [isDownloadingPatient, setIsDownloadingPatient] = useState(false);
+
+  const handleDownloadPdf = async (type: "doctor" | "patient") => {
+    if (!currentSessionId) return;
+
+    const setLoader =
+      type === "doctor" ? setIsDownloadingDoctor : setIsDownloadingPatient;
+    setLoader(true);
+
+    try {
+      const blob =
+        type === "doctor"
+          ? await aiChatApi.downloadDoctorPdf(currentSessionId)
+          : await aiChatApi.downloadPatientPdf(currentSessionId);
+
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+
+      const filename =
+        type === "doctor"
+          ? `anamnesis-report-${currentSessionId.slice(0, 8)}.pdf`
+          : `consultation-summary-${currentSessionId.slice(0, 8)}.pdf`;
+
+      link.setAttribute("download", filename);
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup
+      link.parentNode?.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error(`Failed to download ${type} PDF:`, error);
+      alert(`Failed to download ${type} PDF. Please try again.`);
+    } finally {
+      setLoader(false);
+    }
+  };
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -68,7 +107,7 @@ export const ChatWindow = () => {
         },
         {
           id: msg.messageId + "_ai",
-          text: msg.aiResponse,
+          text: msg.aiResponse || "Sorry, the AI service returned an empty response.",
           isUser: false,
           time: new Date(msg.timestamp).toLocaleTimeString([], {
             hour: "2-digit",
@@ -130,7 +169,7 @@ export const ChatWindow = () => {
           ...prev,
           {
             id: response.messageId,
-            text: response.aiResponse,
+            text: response.aiResponse || "Sorry, the AI service returned an empty response.",
             isUser: false,
             time: new Date(response.timestamp).toLocaleTimeString([], {
               hour: "2-digit",
@@ -155,7 +194,7 @@ export const ChatWindow = () => {
           ...prev,
           {
             id: `ai_${Date.now()}`,
-            text: response.ai_response,
+            text: response.ai_response || "Sorry, the AI service returned an empty response.",
             isUser: false,
             time: new Date().toLocaleTimeString([], {
               hour: "2-digit",
@@ -223,7 +262,45 @@ export const ChatWindow = () => {
       <div className="chat-window">
         {/* ... (решта коду верстки без змін) ... */}
         <div className="chat-header">
-          <h2 className="chat-header__title">AI-CHAT</h2>
+          <div className="chat-header__left">
+            <h2 className="chat-header__title">AI-CHAT</h2>
+          </div>
+
+          {user && currentSessionId && messages.length > 0 && (
+            <div className="chat-header__actions">
+              <button
+                type="button"
+                className="pdf-download-btn pdf-download-btn--patient"
+                onClick={() => handleDownloadPdf("patient")}
+                disabled={isDownloadingPatient || isDownloadingDoctor}
+              >
+                {isDownloadingPatient ? (
+                  <span className="spinner"></span>
+                ) : (
+                  <>
+                    <span className="icon">📄</span>
+                    <span className="text">Patient Summary</span>
+                  </>
+                )}
+              </button>
+              <button
+                type="button"
+                className="pdf-download-btn pdf-download-btn--doctor"
+                onClick={() => handleDownloadPdf("doctor")}
+                disabled={isDownloadingPatient || isDownloadingDoctor}
+              >
+                {isDownloadingDoctor ? (
+                  <span className="spinner"></span>
+                ) : (
+                  <>
+                    <span className="icon">🩺</span>
+                    <span className="text">Doctor Anamnesis</span>
+                  </>
+                )}
+              </button>
+            </div>
+          )}
+
           <div className="chat-header__line"></div>
         </div>
 

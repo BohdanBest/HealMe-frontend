@@ -24,7 +24,7 @@ export const useRegister = () => {
       const response = await authApi.register(apiData);
 
       if (response.success && response.user) {
-        setAuthData(response.user, response.token);
+        setAuthData(response.user, response.token, response.refreshToken || "");
         navigate("/"); // Або на сторінку "Успіх"
       } else {
         setError(response.message || "Помилка реєстрації");

@@ -2,9 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Sidebar } from "@/widgets/Sidebar/ui/Sidebar";
 import "./DoctorDetailsPage.scss";
-
 import { doctorApi } from "@/entities/doctor/api/doctorApi";
-
 import { useUserStore } from "@/entities/user/model/store";
 import { BookingModal } from "@/features/appointment/ui/BookingModal/BookingModal";
 import { AppointmentConfirmModal } from "@/features/appointment/ui/AppointmentConfirmModal/AppointmentConfirmModal";
@@ -55,7 +53,6 @@ const calculateAppointmentDate = (
 
 export const DoctorDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
-  // const navigate = useNavigate();
   const { user } = useUserStore();
 
   const [doctor, setDoctor] = useState<DoctorProfile | null>(null);
@@ -164,11 +161,9 @@ export const DoctorDetailsPage = () => {
         endTime: confirmData.endDate.toISOString(),
       });
 
-      // Оновлюємо список записів, щоб слот став сірим
       await fetchMyAppointments();
 
       setConfirmData(null);
-      // Не переходимо на іншу сторінку, залишаємось тут
       alert("Appointment booked successfully!");
     } catch (e) {
       console.error(e);
@@ -208,7 +203,6 @@ export const DoctorDetailsPage = () => {
       <main className="main-content">
         <div className="doctor-profile-container">
           <div className="profile-header">
-            {/* ... (Header code) ... */}
             <Link to="/doctors" className="back-link">
               <svg
                 width="20"
@@ -345,22 +339,37 @@ export const DoctorDetailsPage = () => {
                 <h3>Patient Reviews</h3>
                 {reviews.length > 0 ? (
                   <div className="reviews-list">
-                    {reviews.map((review) => (
-                      <div key={review.id} className="review-item">
-                        <div className="review-header">
-                          <div className="stars">
-                            {"★".repeat(review.rating)}
-                            <span className="stars-empty">
-                              {"★".repeat(5 - review.rating)}
+                    {reviews.map((review) => {
+                      const patientName =
+                        review.patientFirstName && review.patientLastName
+                          ? `${review.patientFirstName} ${review.patientLastName}`
+                          : "Anonymous Patient";
+                      const avatarInitials =
+                        review.patientFirstName && review.patientLastName
+                          ? `${review.patientFirstName[0].toUpperCase()}${review.patientLastName[0].toUpperCase()}`
+                          : "AP";
+
+                      return (
+                        <div key={review.id} className="review-item">
+                          <div className="review-user">
+                            <div className="review-user-avatar">{avatarInitials}</div>
+                            <div className="review-user-info">
+                              <span className="review-user-name">{patientName}</span>
+                              <div className="stars">
+                                {"★".repeat(review.rating)}
+                                <span className="stars-empty">
+                                  {"★".repeat(5 - review.rating)}
+                                </span>
+                              </div>
+                            </div>
+                            <span className="review-date">
+                              {new Date(review.createdAt).toLocaleDateString()}
                             </span>
                           </div>
-                          <span className="review-date">
-                            {new Date(review.createdAt).toLocaleDateString()}
-                          </span>
+                          <p className="review-text">{review.comment}</p>
                         </div>
-                        <p className="review-text">{review.comment}</p>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 ) : (
                   <div className="empty-state">

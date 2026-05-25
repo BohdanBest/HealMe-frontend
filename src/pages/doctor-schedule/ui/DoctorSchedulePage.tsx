@@ -37,6 +37,18 @@ export const DoctorSchedulePage = () => {
     setAvailability((prev) => [...prev, newSlot]);
   };
 
+  // Коли слот видалено, оновлюємо список
+  const handleSlotDeleted = (id: string) => {
+    setAvailability((prev) => prev.filter((slot) => slot.id !== id));
+  };
+
+  // Коли слот оновлено, оновлюємо список
+  const handleSlotUpdated = (updatedSlot: DoctorAvailability) => {
+    setAvailability((prev) =>
+      prev.map((slot) => (slot.id === updatedSlot.id ? updatedSlot : slot))
+    );
+  };
+
   return (
     <div className="schedule-page-layout">
       <Sidebar />
@@ -66,6 +78,8 @@ export const DoctorSchedulePage = () => {
             (slot) => slot.dayOfWeek === selectedDayOfWeek
           )}
           onSlotAdded={handleSlotAdded}
+          onSlotDeleted={handleSlotDeleted}
+          onSlotUpdated={handleSlotUpdated}
         />
 
         {/* Затінення фону при відкритому дровері */}
@@ -79,3 +93,4 @@ export const DoctorSchedulePage = () => {
     </div>
   );
 };
+

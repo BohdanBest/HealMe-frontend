@@ -85,9 +85,10 @@ export const Sidebar = () => {
               </NavLink>
 
               <NavLink to="/chats" className="nav-item">
-                <span>Chats with doctors</span>
+                <span>{isDoctor ? "Chats with patients" : "Chats with doctors"}</span>
                 <LinkArrowIcon />
               </NavLink>
+
 
               <NavLink to="/appointments" className="nav-item">
                 <span>My appointments</span>

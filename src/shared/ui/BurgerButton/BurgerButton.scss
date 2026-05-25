@@ -1,0 +1,24 @@
+@import '@/app/styles/variables';
+
+.burger-btn {
+  display: none; // На комп'ютері прихована
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  margin-right: 0.5rem;
+  color: #333;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: rgba(0,0,0,0.05);
+  }
+
+  // Показуємо ТІЛЬКИ на мобільних
+  @media (max-width: 768px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

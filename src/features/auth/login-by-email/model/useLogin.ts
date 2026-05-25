@@ -20,7 +20,7 @@ export const useLogin = () => {
       const response = await authApi.login(data);
 
       if (response.success && response.user) {
-        setAuthData(response.user, response.token);
+        setAuthData(response.user, response.token, response.refreshToken || "");
         navigate("/");
       } else {
         setError(response.message || "Login failed");
