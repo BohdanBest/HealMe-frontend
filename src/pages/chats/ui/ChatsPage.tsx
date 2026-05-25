@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Sidebar } from "@/widgets/Sidebar/ui/Sidebar";
-
+import { BurgerButton } from "@/shared/ui/BurgerButton/BurgerButton";
 import { useUserStore } from "@/entities/user/model/store";
 import "./ChatsPage.scss";
 import { appointmentApi } from "@/entities/appointment/api/appointmentApi";
@@ -112,6 +112,7 @@ export const ChatsPage = () => {
       <Sidebar />
       <main className="content">
         <div className="page-header">
+          <BurgerButton />
           <h1 className="title">
             Chats with {isDoctor ? "Patients" : "Doctors"}
           </h1>

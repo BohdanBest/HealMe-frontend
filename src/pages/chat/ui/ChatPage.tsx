@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Sidebar } from "@/widgets/Sidebar/ui/Sidebar"; 
+import { BurgerButton } from "@/shared/ui/BurgerButton/BurgerButton";
 import { useChat } from "@/features/chat/lib/useChat";
 import { useUserStore } from "@/entities/user/model/store";
 import "./ChatPage.scss"; 
@@ -31,6 +32,7 @@ export const ChatPage = () => {
       <main className="chat-main">
         {/* --- HEADER --- */}
         <div className="chat-header">
+          <BurgerButton />
           {/* Ліва частина: Кнопка назад */}
           <Link to="/appointments" className="back-link">
             <svg

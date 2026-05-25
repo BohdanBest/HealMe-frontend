@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Sidebar } from "@/widgets/Sidebar/ui/Sidebar";
-
+import { BurgerButton } from "@/shared/ui/BurgerButton/BurgerButton";
 import { useUserStore } from "@/entities/user/model/store";
 import { Button } from "@/shared/ui/Button/Button";
 import "./AppointmentsPage.scss";
@@ -167,9 +167,12 @@ export const AppointmentsPage = () => {
       <main className="main-content">
         <div className="appointments-container">
           <div className="page-header">
-            <h1 className="page-title">
-              {isDoctor ? "Patient Appointments" : "My Appointments"}
-            </h1>
+            <div className="page-header-title-container">
+              <BurgerButton />
+              <h1 className="page-title">
+                {isDoctor ? "Patient Appointments" : "My Appointments"}
+              </h1>
+            </div>
             <div className="header-divider"></div>
           </div>
 

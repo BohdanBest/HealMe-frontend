@@ -18,7 +18,7 @@
     color: #666;
   }
 
-  @media (max-width: 768px) { 
+  @media (max-width: 1024px) { 
     margin-left: 0; 
     padding: 1.5rem; 
   }
@@ -35,7 +35,6 @@
   margin-right: auto;
   border-bottom: 1px solid #f0f0f0;
   padding-bottom: 1rem;
-
   .page-main-title {
     font-family: $font-family-serif;
     color: $primary-color;

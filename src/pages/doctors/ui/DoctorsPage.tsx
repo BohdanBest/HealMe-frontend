@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Sidebar } from "@/widgets/Sidebar/ui/Sidebar";
+import { BurgerButton } from "@/shared/ui/BurgerButton/BurgerButton";
 import { doctorApi } from "@/entities/doctor/api/doctorApi";
 import { DoctorCard } from "@/entities/doctor/ui/DoctorCard/DoctorCard";
 import type { DoctorProfile } from "@/entities/doctor/model/types";
@@ -47,7 +48,10 @@ export const DoctorsPage = () => {
 
       <main className="doctors-main-content">
         <div className="doctors-header-section">
-          <h1 className="doctors-title">LIST OF DOCTORS</h1>
+          <div className="doctors-header-title-container">
+            <BurgerButton />
+            <h1 className="doctors-title">LIST OF DOCTORS</h1>
+          </div>
           <div className="doctors-divider"></div>
 
           <div className="doctors-search-bar">

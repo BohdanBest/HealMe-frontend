@@ -6,6 +6,27 @@
   width: 100%;
   overflow: hidden;
   background-color: #f8f9fa;
+  position: relative; // Потрібно для overlay
+}
+
+// Overlay що закривається кліком — тільки мобільні/планшети
+.ai-history-overlay {
+  display: none;
+
+  @media (max-width: 1024px) {
+    display: block;
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+    z-index: 49;
+    animation: fadeInOverlay 0.2s ease;
+  }
+}
+
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 .chat-history {
@@ -23,16 +44,16 @@
     opacity: 0;
     overflow: hidden;
 
-    // На мобільних повністю ховаємо
-    @media (max-width: 768px) {
+    // На мобільних/планшетах повністю ховаємо
+    @media (max-width: 1024px) {
       position: absolute;
       z-index: 50;
       height: 100%;
     }
   }
 
-  // Для мобілок - сайдбар поверх контенту
-  @media (max-width: 768px) {
+  // Для мобілок/планшетів - сайдбар поверх контенту
+  @media (max-width: 1024px) {
     position: absolute;
     z-index: 50;
     height: 100%;
@@ -48,9 +69,12 @@
   .history-header {
     padding: 1.5rem;
     border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
 
     .new-chat-btn {
-      width: 100%;
+      flex: 1;
       background-color: #fff;
       border: 1px solid $primary-color;
       color: $primary-color;
@@ -69,6 +93,35 @@
         background-color: $primary-color;
         color: #fff;
         box-shadow: 0 4px 6px rgba($primary-color, 0.2);
+      }
+    }
+
+    .history-close-btn {
+      display: none; // Прихована на десктопі
+      background: #f3f4f6;
+      border: 1px solid #e5e7eb;
+      color: #666;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      min-width: 36px;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      flex-shrink: 0;
+
+      &:hover {
+        background: #e5e7eb;
+        color: #333;
+        transform: scale(1.05);
+      }
+
+      &:active { transform: scale(0.95); }
+
+      // Видима тільки на мобільних та планшетах
+      @media (max-width: 1024px) {
+        display: flex;
       }
     }
   }
@@ -174,6 +227,7 @@
   flex-wrap: wrap;
   gap: 1rem;
   position: relative;
+
 
   &__left {
     display: flex;

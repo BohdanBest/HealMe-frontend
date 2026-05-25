@@ -13,14 +13,20 @@
   position: relative; // Для оверлею
   overflow-x: hidden; // Щоб дровер не розширював сторінку
 
-  @media (max-width: 768px) { margin-left: 0; padding: 1rem; }
+  @media (max-width: 1024px) { margin-left: 0; padding: 1rem; }
+}
+
+.schedule-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
 }
 
 .page-title {
   font-family: $font-family-serif;
   color: $primary-color;
   font-size: 2.5rem;
-  margin-bottom: 0.5rem;
+  margin: 0;
 }
 
 .page-subtitle {

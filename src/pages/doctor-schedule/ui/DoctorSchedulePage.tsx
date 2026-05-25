@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Sidebar } from "@/widgets/Sidebar/ui/Sidebar";
+import { BurgerButton } from "@/shared/ui/BurgerButton/BurgerButton";
 
 import { CalendarGrid } from "./components/CalendarGrid";
 import { ScheduleDrawer } from "./components/ScheduleDrawer";
@@ -54,7 +55,10 @@ export const DoctorSchedulePage = () => {
       <Sidebar />
 
       <main className="schedule-content">
-        <h1 className="page-title">Manage Schedule</h1>
+        <div className="schedule-header">
+          <BurgerButton />
+          <h1 className="page-title">Manage Schedule</h1>
+        </div>
         <p className="page-subtitle">
           Select a day to configure your weekly recurring availability.
         </p>

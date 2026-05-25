@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { Sidebar } from "@/widgets/Sidebar/ui/Sidebar";
+import { BurgerButton } from "@/shared/ui/BurgerButton/BurgerButton";
 
 import { Button } from "@/shared/ui/Button/Button";
 import { Input } from "@/shared/ui/Input/Input";
@@ -92,6 +93,7 @@ export const DoctorProfileEditPage = () => {
       <Sidebar />
       <main className="dashboard-content">
         <div className="dashboard-header">
+          <BurgerButton />
           <h1 className="page-main-title">Edit Profile</h1>
           {doctorProfile && (
             <Link

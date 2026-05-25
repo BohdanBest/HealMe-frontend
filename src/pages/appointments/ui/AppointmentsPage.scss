@@ -18,7 +18,7 @@
     color: #666;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     margin-left: 0;
     padding: 1.5rem;
   }
@@ -34,12 +34,18 @@
 .page-header {
   margin-bottom: 3rem;
 
+  &-title-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
   .page-title {
     font-family: $font-family-serif;
     color: $primary-color;
     font-size: 3rem;
     font-weight: 500;
-    margin: 0 0 1rem 0;
+    margin: 0;
   }
 
   .header-divider {

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Sidebar } from "@/widgets/Sidebar/ui/Sidebar";
+import { BurgerButton } from "@/shared/ui/BurgerButton/BurgerButton";
 import "./DoctorDetailsPage.scss";
 import { doctorApi } from "@/entities/doctor/api/doctorApi";
 import { useUserStore } from "@/entities/user/model/store";
@@ -203,7 +204,9 @@ export const DoctorDetailsPage = () => {
       <main className="main-content">
         <div className="doctor-profile-container">
           <div className="profile-header">
-            <Link to="/doctors" className="back-link">
+            <div className="profile-header__top">
+              <BurgerButton />
+              <Link to="/doctors" className="back-link">
               <svg
                 width="20"
                 height="20"
@@ -215,6 +218,7 @@ export const DoctorDetailsPage = () => {
               </svg>
               Back to list
             </Link>
+            </div>
 
             <div className="profile-card">
               <div className="profile-avatar">{initials}</div>

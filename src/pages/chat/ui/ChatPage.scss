@@ -14,7 +14,7 @@
   flex-direction: column;
   height: 100vh;
   
-  @media (max-width: 768px) { margin-left: 0; }
+  @media (max-width: 1024px) { margin-left: 0; }
 }
 
 // HEADER (Без змін)
@@ -28,7 +28,6 @@
   align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
-
   .back-link {
     display: flex;
     align-items: center;

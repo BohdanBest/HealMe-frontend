@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { TypewriterText } from "@/shared/ui/TypewriterText/TypewriterText";
 import { useUIStore } from "@/shared/model/uiStore";
 import { useUserStore } from "@/entities/user/model/store";
+import { BurgerButton } from "@/shared/ui/BurgerButton/BurgerButton";
 import "./ChatWindow.scss";
 import type { AiSession } from "@/entities/ai-chat/model/types";
 import { aiChatApi } from "@/entities/ai-chat/api/aiChatApi";
@@ -229,13 +230,31 @@ export const ChatWindow = () => {
 
   return (
     <div className="chat-layout-wrapper">
-      {/* Sidebar показуємо ТІЛЬКИ для авторизованих */}
+      {/* Overlay для закриття AI-History на мобільних */}
+      {user && isAiHistoryOpen && (
+        <div
+          className="ai-history-overlay"
+          onClick={closeAiHistory}
+          aria-hidden="true"
+        />
+      )}
+
+      {/* AI History sidebar */}
       {user && (
         <aside
           className={`chat-history ${isAiHistoryOpen ? "open" : "closed"}`}>
           <div className="history-header">
             <button className="new-chat-btn" onClick={startNewChat}>
               + New Chat
+            </button>
+            <button
+              className="history-close-btn"
+              onClick={closeAiHistory}
+              aria-label="Close history"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+              </svg>
             </button>
           </div>
           <div className="history-list">
@@ -262,6 +281,7 @@ export const ChatWindow = () => {
       <div className="chat-window">
         {/* ... (решта коду верстки без змін) ... */}
         <div className="chat-header">
+          <BurgerButton />
           <div className="chat-header__left">
             <h2 className="chat-header__title">AI-CHAT</h2>
           </div>
